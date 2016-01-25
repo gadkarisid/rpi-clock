@@ -1,0 +1,37 @@
+README for Raspberry Pi Clock
+-----------------------------
+
+Overview:
+This package displays the current time (via NTP) and current outside temperature (via WeatherUnderground) on an Adafruit 7 segment LED display. Since there is no real time clock involved, the time is only accurate while the Raspberry Pi is powered on and connected to the Internet. It is most accurate when the NTP source has low drift. Time can be displayed in 12 or 24 hour format. Your local zip code can be configured for local temperature. Temperature info is displayed as whole numbers with no rounding in Farenheit. There is a watchdog script ('watchdog.sh') that runs in the background to ensure the clock script is started at boot and also is restarted if it crashes.
+
+Requirements:
+- 7 Segment display from Adafruit
+- Network connectivity on Raspberry Pi
+- NTP servers configured on Raspberry Pi (/etc/ntp.conf)
+- Local timezone configured on Raspberry Pi (use 'raspi-config')
+- Python installed on Raspberry Pi (see Adafruit documentation for details)
+- I2C enabled on Raspberry Pi (use 'raspi-config' and refer to Adafruit documentation for details)
+- ~/scripts folder must exist on Raspberry Pi
+
+Instructions:
+1. Find Python modules directory
+	a. From Raspberry Pi CLI, run 'sudo python'
+	b. Run 'import os'
+	c. Run 'os'
+	d. Copy path (ex. '/usr/lib/python2.7/')
+	e. CTRL-D
+	f. Copy 'Adafruit_*' and 'SevenSegment.py' files to this location
+2. In /usr/bin/ directory, create a new subdirectory called "rpi-clock"
+3. Copy 'clear_display.py', 'display_test.py', 'clock.py', and 'clock_test.py' to /usr/bin/rpi-clock/
+4. Copy 'watchdog.sh' to home folder
+5. Edit the 'zipcode' variable in 'clock.py' file to match local zip code
+6. Edit the 'show_weather' variable if you want to see weather info
+7. Edit the 'format' variable in 'clock.py' to define 12 hour or 24 hour format
+8. Make the watchdog script executable by running (no quotes) 'sudo chmod +x watchdog.sh'
+9. Edit '/etc/rc.local' and add the following line (no quotes) > 'exec /home/osmc/watchdog.sh --silent &' so the script runs at boot.
+10. Shutdown and power off the Raspberry Pi
+11. Connect necessary GPIO pins to 7 segment display
+12. Boot the Raspberry Pi
+
+*** NOTE ***
+If you find that the display is too bright you can modify line 45 ('self.brightness(15)') of 'Adafruit_LEDBackpack.py'. Minimum value is 0 max is 15.
