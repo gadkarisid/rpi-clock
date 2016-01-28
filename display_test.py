@@ -4,6 +4,8 @@ import time
 from Adafruit_7Segment import *
 
 display = SevenSegment(address=0x70)
+brightness = 15
+LEDBackpack().setBrightness(brightness)
 display.disp.clear()
 
 position = 0 
