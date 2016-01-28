@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # Author: Sid Gadkari
-# Last Revision: 12/21/2015 This script runs at boot and acts as a watchdog to start and restart any scripts that stop running for any reason.
+# Last Revision: 12/21/2015 
+# This script runs at boot and acts as a watchdog to start and restart any scripts that stop running for any reason.
 # After updating this script, make it executable (chmod +x) and run at boot via /etc/rc.local.
 
 # Main loop
