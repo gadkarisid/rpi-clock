@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+# This script draws '----' and then clears the display of all data.
+
 import time
 import datetime
 from Adafruit_7Segment import SevenSegment
