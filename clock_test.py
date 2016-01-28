@@ -15,7 +15,7 @@ hour_format = 24
 # Define if you want to see weather information (yes/no)
 show_weather = "yes"
 # Define your zip code for weather updates
-user_zipcode = 60563
+user_zipcode = 123456
 # Define how bright the display should be (0 to 15)
 brightness = 15
 #----------------------END USER PREFERENCES----------------------
