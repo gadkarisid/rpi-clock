@@ -27,11 +27,9 @@ Instructions:
 5. Edit the 'zipcode' variable in 'clock.py' file to match local zip code
 6. Edit the 'show_weather' variable if you want to see weather info
 7. Edit the 'format' variable in 'clock.py' to define 12 hour or 24 hour format
-8. Make the watchdog script executable by running (no quotes) 'sudo chmod +x watchdog.sh'
-9. Edit '/etc/rc.local' and add the following line (no quotes) > 'exec /home/osmc/watchdog.sh --silent &' so the script runs at boot.
-10. Shutdown and power off the Raspberry Pi
-11. Connect necessary GPIO pins to 7 segment display
-12. Boot the Raspberry Pi
-
-*** NOTE ***
-If you find that the display is too bright you can modify line 45 ('self.brightness(15)') of 'Adafruit_LEDBackpack.py'. Minimum value is 0 max is 15.
+8. Edit the 'brightness' variable in 'clock.py' to adjust how bright the display is.
+9. Make the watchdog script executable by running (no quotes) 'sudo chmod +x watchdog.sh'
+10. Edit '/etc/rc.local' and add the following line (no quotes) > 'exec /home/osmc/watchdog.sh --silent &' so the script runs at boot.
+11. Shutdown and power off the Raspberry Pi
+12. Connect necessary GPIO pins to 7 segment display
+13. Boot the Raspberry Pi
