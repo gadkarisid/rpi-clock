@@ -1,5 +1,5 @@
 # Author: Sid Gadkari
-# Last Revision Date: 01/22/2016
+# Last Revision Date: 01/28/2016
 
 #!/usr/bin/python
 import os
@@ -7,22 +7,25 @@ import time
 import datetime
 import signal
 import sys
-from Adafruit_7Segment import SevenSegment
+from Adafruit_7Segment import *
 
-# ***BEGIN USER PREFERENCES***
+#---------------------BEGIN USER PREFERENCES---------------------
 # Define time format (12 or 24 hour)
 hour_format = 24
 # Define if you want to see weather information (yes/no)
 show_weather = "yes"
 # Define your zip code for weather updates
 user_zipcode = 60563
-# ***END USER PREFERENCES***
+# Define how bright the display should be (0 to 15)
+brightness = 15
+#----------------------END USER PREFERENCES----------------------
 
 # Initialize display
 display = SevenSegment(address=0x70)
+LEDBackpack().setBrightness(brightness)
 
 # Change working directory
-os.chdir('/home/pi/scripts')
+os.chdir('/usr/bin/rpi-clock')
 
 # Set the hour offset based on user preference
 hour_offset = 24 - hour_format
