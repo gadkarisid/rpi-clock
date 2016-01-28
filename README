@@ -20,7 +20,7 @@ Instructions:
 	c. Run 'os'
 	d. Copy path (ex. '/usr/lib/python2.7/')
 	e. CTRL-D
-	f. Copy 'Adafruit_*' and 'SevenSegment.py' files to this location
+	f. Copy all files in Adafruit-Libraries folder to this location
 2. In /usr/bin/ directory, create a new subdirectory called "rpi-clock"
 3. Copy 'clear_display.py', 'display_test.py', 'clock.py', and 'clock_test.py' to /usr/bin/rpi-clock/
 4. Copy 'watchdog.sh' to home folder
@@ -29,7 +29,8 @@ Instructions:
 7. Edit the 'format' variable in 'clock.py' to define 12 hour or 24 hour format
 8. Edit the 'brightness' variable in 'clock.py' to adjust how bright the display is.
 9. Make the watchdog script executable by running (no quotes) 'sudo chmod +x watchdog.sh'
-10. Edit '/etc/rc.local' and add the following line (no quotes) > 'exec /home/osmc/watchdog.sh --silent &' so the script runs at boot.
+10. Edit '/etc/rc.local' and add the following line (no quotes) > 'exec /home/<local username>/watchdog.sh --silent &' so the script runs at 
+    boot. Be sure to edit the path accordingly based on your username.
 11. Shutdown and power off the Raspberry Pi
 12. Connect necessary GPIO pins to 7 segment display
 13. Boot the Raspberry Pi
