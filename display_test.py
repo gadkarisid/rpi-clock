@@ -1,13 +1,21 @@
 #!/usr/bin/python
 
+# Test script to make sure display is functioning correctly and all segments work.
+
 import time
 from Adafruit_7Segment import *
 
+# Initialize display
 display = SevenSegment(address=0x70)
+
+# Set brightness
 brightness = 15
 LEDBackpack().setBrightness(brightness)
+
+# Clear display
 display.disp.clear()
 
+# Light all segments individually
 position = 0 
 while (position <= 4): 
 	display.writeDigitRaw(position,(1))
