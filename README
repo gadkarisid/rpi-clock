@@ -6,7 +6,7 @@ This package displays the current time (via NTP) and current outside temperature
 
 Requirements:
 - Raspbery Pi (tested on RPi Model B and RPi 2)
-- Assembled 7 Segment display from Adafruit (https://www.adafruit.com/categories/103)
+- Assembled 7 Segment display w/I2C backpack from Adafruit (ex. https://www.adafruit.com/products/1270)
 - Network connectivity on Raspberry Pi
 - NTP servers configured on Raspberry Pi (/etc/ntp.conf)
 - Local timezone configured on Raspberry Pi (use 'raspi-config')
