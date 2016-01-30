@@ -16,7 +16,7 @@ Requirements:
 Instructions:
 1. Update your Raspberry Pi ('sudo apt-get update' followed by 'sudo apt-get upgrade')
 2. Install dependency packages ('sudo apt-get install build-essential python-dev python-smbus python-imaging') 
-4. Run 'git clone https://github.com/gadkarisid/rpi-clock' and change your directory to 'rpi-clock'
+4. Run 'git clone https://github.com/gadkarisid/rpi-clock && cd rpi-clock'
 5. Run 'bash INSTALL'
 6. Modify '/etc/rc.local' and add 'exec ~/watchdog.sh --silent &' before the 'exit 0' line.
 7. Modify the user preferences in '/usr/bin/rpi-clock/clock.py'
