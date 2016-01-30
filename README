@@ -18,8 +18,7 @@ Instructions:
 2. Install dependency packages ('sudo apt-get install build-essential python-dev python-smbus python-imaging') 
 4. Run 'git clone https://github.com/gadkarisid/rpi-clock' and change your directory to 'rpi-clock'
 5. Run 'bash INSTALL'
-6. Run 'sudo chmod +x ~/watchdog.sh'
-7. Modify '/etc/rc.local' and add 'exec ~/watchdog.sh --silent &' before the 'exit 0' line.
-8. Shutdown and power off the Raspberry Pi
-9. Connect necessary GPIO pins to 7 segment display
-10. Boot the Raspberry Pi
+6. Modify '/etc/rc.local' and add 'exec ~/watchdog.sh --silent &' before the 'exit 0' line.
+7. Shutdown and power off the Raspberry Pi
+8. Connect necessary GPIO pins to 7 segment display
+9. Boot the Raspberry Pi
