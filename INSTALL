@@ -14,6 +14,7 @@ sudo mv display_test.py /usr/bin/rpi-clock
 sudo mv clear_display.py /usr/bin/rpi-clock
 mv watchdog.sh ~/
 cd ~/
+sudo chmod +x watchdog.sh
 rm -f -r rpi-clock
 
 exit 0
