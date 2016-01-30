@@ -3,7 +3,6 @@
 cd Adafruit-Libraries
 sudo mv Adafruit* /usr/lib/python2.7/
 cd ..
-rm -f -r Adafruit-Libraries
 
 if [ ! -d /usr/bin/rpi-clock ]
 then
