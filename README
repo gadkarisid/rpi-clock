@@ -16,22 +16,9 @@ Requirements:
 Instructions:
 1. Update your Raspberry Pi ('sudo apt-get update' followed by 'sudo apt-get upgrade')
 2. Install dependency packages ('sudo apt-get install build-essential python-dev python-smbus python-imaging') 
-3. Find Python modules directory
-	a. From Raspberry Pi CLI, run 'sudo python'
-	b. Run 'import os'
-	c. Run 'os'
-	d. Copy path (ex. '/usr/lib/python2.7/')
-	e. CTRL-D
-	f. Copy all files in Adafruit-Libraries folder to this location
-4. In /usr/bin/ directory, create a new subdirectory called "rpi-clock"
-5. Copy 'clear_display.py', 'display_test.py', 'clock.py', and 'clock_test.py' to /usr/bin/rpi-clock/
-6. Copy 'watchdog.sh' to home folder
-7. Edit the 'zipcode' variable in 'clock.py' file to match local zip code
-8. Edit the 'show_weather' variable if you want to see weather info
-9. Edit the 'format' variable in 'clock.py' to define 12 hour or 24 hour format
-10. Edit the 'brightness' variable in 'clock.py' to adjust how bright the display is.
-11. Make the watchdog script executable by running (no quotes) 'sudo chmod +x watchdog.sh'
-12. Edit '/etc/rc.local' and add the following line (no quotes) > 'exec /home/<local username>/watchdog.sh --silent &' so the script runs at boot. Be sure to edit the path accordingly based on your username.
-13. Shutdown and power off the Raspberry Pi
-14. Connect necessary GPIO pins to 7 segment display
-15. Boot the Raspberry Pi
+3. Run 'bash INSTALL'
+4. Run 'sudo chmod +x ~/watchdog.sh'
+5. Modify '/etc/rc.local' and add 'exec ~/watchdog.sh --silent &' before the 'exit 0' line.
+6. Shutdown and power off the Raspberry Pi
+7. Connect necessary GPIO pins to 7 segment display
+8. Boot the Raspberry Pi
