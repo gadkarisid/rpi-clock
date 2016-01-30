@@ -4,14 +4,15 @@ cd Adafruit-Libraries
 sudo mv Adafruit* /usr/lib/python2.7/
 cd ..
 rm -f -r Adafruit-Libraries
+
 if [ ! -d /usr/bin/rpi-clock ]
 then
   sudo mkdir /usr/bin/rpi-clock/
-else
-  sudo mv clock* /usr/bin/rpi-clock/
-  sudo mv display_test.py /usr/bin/rpi-clock
-  sudo mv clear_display.py /usr/bin/rpi-clock
 fi
+
+sudo mv clock* /usr/bin/rpi-clock/
+sudo mv display_test.py /usr/bin/rpi-clock
+sudo mv clear_display.py /usr/bin/rpi-clock
 mv watchdog.sh ~/
 cd ~/
 rm -f -r rpi-clock
