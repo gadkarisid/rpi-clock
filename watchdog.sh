@@ -11,6 +11,6 @@ do
 	# Check if the  processes are running. If it isn't then run the scripts.
 	pgrep -f clock.py || python /usr/bin/rpi-clock/clock.py --silent &
 
-	# Sleep for 120 sec. and then check process status again.
+	# Sleep and then check process status again.
 	sleep 60
 done
