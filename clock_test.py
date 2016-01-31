@@ -1,5 +1,5 @@
 # Author: Sid Gadkari
-# Last Revision Date: 01/28/2016
+# Last Revision Date: 01/31/2016
 
 #!/usr/bin/python
 import os
@@ -9,20 +9,34 @@ import signal
 import sys
 from Adafruit_7Segment import *
 
+
 #---------------------BEGIN USER PREFERENCES---------------------
 # Define time format (12 or 24 hour)
 hour_format = 24
+
 # Define if you want to see weather information (yes/no)
 show_weather = "yes"
+
 # Define your zip code for weather updates
 user_zipcode = 123456
-# Define how bright the display should be (0 to 15)
-brightness = 15
+
+# Default display brightness (0 to 15)
+default_brightness = 15
+
+# Auto dimming based on time of day (enabled/disabled)
+auto_dimming = "enabled"
+
+# Display brightness during day (0 to 15)
+day_bright = 9
+
+# Display brightness during night (0 to 15)
+night_bright = 5
 #----------------------END USER PREFERENCES----------------------
+
 
 # Initialize display
 display = SevenSegment(address=0x70)
-LEDBackpack().setBrightness(brightness)
+LEDBackpack().setBrightness(default_brightness)
 
 # Change working directory
 os.chdir('/usr/bin/rpi-clock')
@@ -203,12 +217,23 @@ while (position <= 4):
 display.writeDigitRaw(2,2)
 time.sleep(1)
 
+foo = 0
+
 # Start main loop
 while(True):
 	# If RPi is shutting down then run the "signal_handler" function
 	signal.signal(signal.SIGTERM, signal_handler)
 	# Check current time
 	currenttime()
+	
+	# Set display brightness based on time of day
+	if (auto_dimming == "enabled"):
+		if (((minute == 0) and (second == 0)) or (foo == 0)):
+			if ((hour >= 9) and (hour <= 16)):
+				LEDBackpack().setBrightness(day_bright)
+			else:
+				LEDBackpack().setBrightness(night_bright)
+
 	# If user preference is to show weather, then show temperature for 15 seconds at the beginning of each even minute
 	if (show_weather == "yes"):
 		if (second == 1) and ((minute % 10) == 0 or (minute % 10) == 2 or (minute % 10) == 4  or (minute % 10) == 6 or (minute % 10) == 8):
@@ -222,3 +247,4 @@ while(True):
 	# If user preference is not to show weather then show current time
 	else:
 		displaytime()
+	foo = 1
