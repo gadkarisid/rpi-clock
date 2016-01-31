@@ -10,7 +10,7 @@ Requirements:
 - Network connectivity on Raspberry Pi
 - NTP servers configured on Raspberry Pi (/etc/ntp.conf)
 - Local timezone configured on Raspberry Pi (use 'raspi-config')
-- Python installed on Raspberry Pi
+- Python 2.7 installed on Raspberry Pi
 - I2C enabled on Raspberry Pi (https://learn.adafruit.com/adafruits-raspberry-pi-lesson-4-gpio-setup/configuring-i2c)
 
 Instructions:
