@@ -1,5 +1,5 @@
 # Author: Sid Gadkari
-# Last Revision Date: 01/31/2016
+# Last Revision Date: 02/05/2016
 
 #!/usr/bin/python
 import os
@@ -229,7 +229,7 @@ while(True):
 	# Set display brightness based on time of day
 	if (auto_dimming == "enabled"):
 		if (((minute == 0) and (second == 0)) or (foo == 0)):
-			if ((hour >= 9) and (hour <= 16)):
+			if ((hour >= 8) and (hour <= 15)):
 				LEDBackpack().setBrightness(day_bright)
 			else:
 				LEDBackpack().setBrightness(night_bright)
