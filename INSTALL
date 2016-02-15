@@ -6,6 +6,8 @@
 
 #!/bin/bash
 
+echo "Starting Installation..."
+
 cd Adafruit-Libraries
 sudo mv Adafruit* /usr/lib/python2.7/
 cd ..
@@ -24,5 +26,7 @@ sudo mv watchdog.sh ~/
 cd ~/
 sudo chmod +x watchdog.sh
 rm -f -r rpi-clock
+
+echo "Installation Complete"
 
 exit 0
