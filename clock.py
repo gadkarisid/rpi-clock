@@ -135,11 +135,11 @@ def draw_unit():
 	
 	# Draw 'F' if user preference is Farenheit
 	if (unit_pref == "F"):
-        display.writeDigitRaw(4,(1+32+16+64))
+        	display.writeDigitRaw(4,(1+32+16+64))
 	
 	# Draw 'C' if user preference is Celsius
 	if (unit_pref == "C"):
-        display.writeDigitRaw(4,(1+32+16+8))
+        	display.writeDigitRaw(4,(1+32+16+8))
 
 # Define display weather function
 def displayweather():
