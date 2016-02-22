@@ -51,8 +51,35 @@ hour_offset = 24 - hour_format
 # Set numeric zip code to a string value
 zipcode = str(user_zipcode)
 
+# Define display self-test function
+def selftest():
+	# Light all segments of the display to check for physical problems
+	position = 0
+	while (position <= 4):
+        	display.writeDigitRaw(position,(1))
+        	time.sleep(.12)
+        	display.writeDigitRaw(position,(1+2))
+        	time.sleep(.12)
+        	display.writeDigitRaw(position,(1+2+4))
+        	time.sleep(.12)
+        	display.writeDigitRaw(position,(1+2+4+8))
+        	time.sleep(.12)
+        	display.writeDigitRaw(position,(1+2+4+8+16))
+        	time.sleep(.12)
+        	display.writeDigitRaw(position,(1+2+4+8+16+32))
+        	time.sleep(.12)
+        	display.writeDigitRaw(position,(1+2+4+8+16+32+64))
+        	time.sleep(.12)
+        	position += 1
+        	if (position == 2):
+	                position = 3
+
+	display.setColon(True)
+	time.sleep(1)
+	
 # Define system signal handler function
 def signal_handler(signal, frame):
+	# If RPi is shutting down or rebooting clear the LED display
 	display.disp.clear()
 	sys.exit(0)
 
@@ -207,38 +234,16 @@ def displaytime():
 	time.sleep(.75)
 	display.writeDigitRaw(2,0)
 	time.sleep(.75)
-	
 
-# Clear display and light all segments
-position = 0
-while (position <= 4):
-        display.writeDigitRaw(position,(1))
-        time.sleep(.12)
-        display.writeDigitRaw(position,(1+2))
-        time.sleep(.12)
-        display.writeDigitRaw(position,(1+2+4))
-        time.sleep(.12)
-        display.writeDigitRaw(position,(1+2+4+8))
-        time.sleep(.12)
-        display.writeDigitRaw(position,(1+2+4+8+16))
-        time.sleep(.12)
-        display.writeDigitRaw(position,(1+2+4+8+16+32))
-        time.sleep(.12)
-        display.writeDigitRaw(position,(1+2+4+8+16+32+64))
-        time.sleep(.12)
-        position += 1
-        if (position == 2):
-                position = 3
-
-display.setColon(True)
-time.sleep(1)
+# Run display self-test when script starts before displaying time
+selftest()
 
 # Set flag when script is first run
 foo = 0
 
 # Start main loop
 while(True):
-	# If RPi is shutting down then run the "signal_handler" function
+	# If RPi is shutting down then run the "signal_handler" function and clear the LED display
 	signal.signal(signal.SIGTERM, signal_handler)
 	# Check current time
 	currenttime()
