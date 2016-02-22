@@ -2,7 +2,7 @@
 # Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met: * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer. * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution. * Neither the name of the nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-# Last Revision Date: 02/15/2016
+# Last Revision Date: 02/22/2016
 
 #!/usr/bin/python
 import os
@@ -20,6 +20,9 @@ hour_format = 24
 # Define if you want to see weather information (yes/no)
 show_weather = "yes"
 
+# Define temperature unit (F or C)
+unit_pref = "F"
+
 # Define your zip code for weather updates
 user_zipcode = 123456
 
@@ -30,7 +33,7 @@ default_brightness = 15
 auto_dimming = "enabled"
 
 # Display brightness during day (0 to 15)
-day_bright = 9
+day_bright = 5
 
 # Display brightness during night (0 to 15)
 night_bright = 5
@@ -75,6 +78,7 @@ def currenttime():
 def weatherupdate():
 	global raw_temp
 	global current_temp
+	global unit_pref
 	global weather_update_error
 	
 	# Set weather_update_error to default value
@@ -118,9 +122,24 @@ def weatherupdate():
 	
 			# Convert temperature value to an integer
 			current_temp = int(float(raw_temp))
+			if (unit_pref == "C"):
+				conversion = ((current_temp - 32) / 1.8)
+				current_temp = int(float(conversion))
 			display.disp.clear()
 		else:
 			weather_update_error = "true"
+
+# Define draw unit function
+def draw_unit():
+	global unit_pref
+	
+	# Draw 'F' if user preference is Farenheit
+	if (unit_pref == "F"):
+        display.writeDigitRaw(4,(1+32+16+64))
+	
+	# Draw 'C' if user preference is Celcius
+	if (unit_pref == "C"):
+        display.writeDigitRaw(4,(1+32+16+8))
 
 # Define display weather function
 def displayweather():
@@ -133,8 +152,6 @@ def displayweather():
 		display.writeDigitRaw(0, 64)
 		# Only digit of temperature
 		display.writeDigit(1, int(neg_temp % 10))
-		# Draw letter 'F'
-		display.writeDigit(4,15)
 		
 	# Handle double digit negative temperatures
 	if (current_temp <= -10):
@@ -145,24 +162,18 @@ def displayweather():
 		display.writeDigit(1, int(neg_temp / 10))
 		# Second digit of temperature
 		display.writeDigit(3, neg_temp % 10)
-		# Draw letter 'F'
-		display.writeDigit(4,15)
-	
+			
 	# Handle single digit positive temperatures
 	if ((current_temp >= 0) and (current_temp < 10)):
 		# Only digit of temperature (omitting zero)
 		display.writeDigit(0, current_temp % 10)
-		# Draw letter 'F'
-		display.writeDigit(4,15)
-	
+			
 	# Handle double digit positive temperatures
 	if ((current_temp >= 10) and (current_temp < 100)):
 		# First digit of temperature
 		display.writeDigit(0, int(current_temp / 10))
 		# Second digit of temperature
 		display.writeDigit(1, current_temp % 10)
-		# Draw letter 'F'
-		display.writeDigit(4,15)
 				
 	# Handle triple digit positive temperatures
 	if (current_temp >= 100):
@@ -172,9 +183,10 @@ def displayweather():
 		display.writeDigit(1, current_temp % 10)
 		# Third digit of temperature
 		display.writeDigit(3, current_temp % 1)
-		# Draw letter 'F'
-		display.writeDigit(4,15)
 		
+	# Draw temperature unit
+	draw_unit()
+	
 	# Cleanup Temp Files
 	os.system("rm -r -f *.tmp")
 	
@@ -190,9 +202,9 @@ def displaytime():
 	# Second digit of minutes
 	display.writeDigit(4, minute % 10)
 	# Toggle blinking colon
-	display.writeDigitRaw(2,2)
+	display.setColon(True)
 	time.sleep(.75)
-	display.writeDigitRaw(2,0)
+	display.setColon(False)
 	time.sleep(.75)
 	
 
