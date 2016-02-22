@@ -137,7 +137,7 @@ def draw_unit():
 	if (unit_pref == "F"):
         display.writeDigitRaw(4,(1+32+16+64))
 	
-	# Draw 'C' if user preference is Celcius
+	# Draw 'C' if user preference is Celsius
 	if (unit_pref == "C"):
         display.writeDigitRaw(4,(1+32+16+8))
 
