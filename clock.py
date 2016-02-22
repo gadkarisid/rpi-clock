@@ -4,15 +4,6 @@
 
 # Last Revision Date: 02/22/2016
 
-#!/usr/bin/python
-import os
-import time
-import datetime
-import signal
-import sys
-from Adafruit_7Segment import *
-
-
 #---------------------BEGIN USER PREFERENCES---------------------
 # Define time format (12 or 24 hour)
 hour_format = 24
@@ -39,6 +30,14 @@ day_bright = 9
 night_bright = 5
 #----------------------END USER PREFERENCES----------------------
 
+#!/usr/bin/python
+
+import os
+import time
+import datetime
+import signal
+import sys
+from Adafruit_7Segment import *
 
 # Initialize display
 display = SevenSegment(address=0x70)
