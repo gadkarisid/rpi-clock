@@ -122,6 +122,8 @@ def weatherupdate():
 	
 			# Convert temperature value to an integer
 			current_temp = int(float(raw_temp))
+			
+			# Handle temperature based on user preference (default is F)
 			if (unit_pref == "C"):
 				conversion = ((current_temp - 32) / 1.8)
 				current_temp = int(float(conversion))
