@@ -190,9 +190,9 @@ def displaytime():
 	# Second digit of minutes
 	display.writeDigit(4, minute % 10)
 	# Toggle blinking colon
-	display.writeColon(True)
+	display.setColon(True)
 	time.sleep(.75)
-	display.writeColon(False)
+	display.setColon(False)
 	time.sleep(.75)
 	
 
