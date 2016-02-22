@@ -234,6 +234,7 @@ while (position <= 4):
 display.setColon(True)
 time.sleep(1)
 
+# Set flag when script is first run
 foo = 0
 
 # Start main loop
@@ -243,7 +244,7 @@ while(True):
 	# Check current time
 	currenttime()
 	
-	# Set display brightness based on time of day
+	# Set display brightness based on time of day or if script has just started
 	if (auto_dimming == "enabled"):
 		if (((minute == 0) and (second == 0)) or (foo == 0)):
 			if ((hour >= 8) and (hour <= 15)):
@@ -264,4 +265,6 @@ while(True):
 	# If user preference is not to show weather then show current time
 	else:
 		displaytime()
+	
+	# Flag to indicate that script has already been started to avoid resetting display brightness
 	foo = 1
