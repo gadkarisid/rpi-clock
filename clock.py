@@ -33,7 +33,7 @@ default_brightness = 15
 auto_dimming = "enabled"
 
 # Display brightness during day (0 to 15)
-day_bright = 5
+day_bright = 9
 
 # Display brightness during night (0 to 15)
 night_bright = 5
