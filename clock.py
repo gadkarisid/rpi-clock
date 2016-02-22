@@ -134,7 +134,7 @@ def displayweather():
 		# Only digit of temperature
 		display.writeDigit(1, int(neg_temp % 10))
 		# Draw letter 'F'
-		display.writeDigitRaw(4,(16+32+1+64))
+		display.writeDigit(4,15)
 		
 	# Handle double digit negative temperatures
 	if (current_temp <= -10):
@@ -146,14 +146,14 @@ def displayweather():
 		# Second digit of temperature
 		display.writeDigit(3, neg_temp % 10)
 		# Draw letter 'F'
-		display.writeDigitRaw(4,(16+32+1+64))
+		display.writeDigit(4,15)
 	
 	# Handle single digit positive temperatures
 	if ((current_temp >= 0) and (current_temp < 10)):
 		# Only digit of temperature (omitting zero)
 		display.writeDigit(0, current_temp % 10)
 		# Draw letter 'F'
-		display.writeDigitRaw(4,(16+32+1+64))
+		display.writeDigit(4,15)
 	
 	# Handle double digit positive temperatures
 	if ((current_temp >= 10) and (current_temp < 100)):
@@ -162,7 +162,7 @@ def displayweather():
 		# Second digit of temperature
 		display.writeDigit(1, current_temp % 10)
 		# Draw letter 'F'
-		display.writeDigitRaw(4,(16+32+1+64))
+		display.writeDigit(4,15)
 				
 	# Handle triple digit positive temperatures
 	if (current_temp >= 100):
@@ -173,7 +173,7 @@ def displayweather():
 		# Third digit of temperature
 		display.writeDigit(3, current_temp % 1)
 		# Draw letter 'F'
-		display.writeDigitRaw(4,(16+32+1+64))
+		display.writeDigit(4,15)
 		
 	# Cleanup Temp Files
 	os.system("rm -r -f *.tmp")
@@ -190,9 +190,9 @@ def displaytime():
 	# Second digit of minutes
 	display.writeDigit(4, minute % 10)
 	# Toggle blinking colon
-	display.writeDigitRaw(2, 2)
+	display.writeColon(True)
 	time.sleep(.75)
-	display.writeDigitRaw(2, 0)
+	display.writeColon(False)
 	time.sleep(.75)
 	
 
@@ -217,7 +217,7 @@ while (position <= 4):
         if (position == 2):
                 position = 3
 
-display.writeDigitRaw(2,2)
+display.setColon(True)
 time.sleep(1)
 
 foo = 0
