@@ -253,7 +253,7 @@ while(True):
 	
 	# Set display brightness based on time of day or if script has just started
 	if (auto_dimming == "enabled"):
-		if (((minute == 0) and (second == 0)) or (foo == 0)):
+		if ((minute == 0) and (second <= 10)) or (foo == 0):
 			if ((hour >= 8) and (hour <= 15)):
 				LEDBackpack().setBrightness(day_bright)
 			else:
