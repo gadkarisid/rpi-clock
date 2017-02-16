@@ -6,7 +6,7 @@
 
 #---------------------BEGIN USER PREFERENCES---------------------
 # Define time format (12 or 24 hour)
-hour_format = 24
+hour_format = 12
 
 # Define if you want to see weather information (yes/no)
 show_weather = "yes"
@@ -15,7 +15,7 @@ show_weather = "yes"
 unit_pref = "F"
 
 # Define your zip code for weather updates
-user_zipcode = 60510
+user_zipcode = 20001
 
 # Default display brightness (0 to 15)
 default_brightness = 15
@@ -24,10 +24,10 @@ default_brightness = 15
 auto_dimming = "enabled"
 
 # Display brightness during day (0 to 15)
-day_bright = 8
+day_bright = 15
 
 # Display brightness during night (0 to 15)
-night_bright = 6
+night_bright = 15
 #----------------------END USER PREFERENCES----------------------
 
 #!/usr/bin/python
