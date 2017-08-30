@@ -15,7 +15,7 @@ show_weather = "yes"
 unit_pref = "F"
 
 # Define your US zip code
-user_zipcode = "20001"
+zipcode = "20001"
 
 # Default display brightness (0 to 15)
 default_brightness = 15
