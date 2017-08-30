@@ -2,7 +2,7 @@
 # Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met: * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer. * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution. * Neither the name of the nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-# Last Revision Date: 02/09/2017
+# Last Revision Date: 08/30/2017
 
 #---------------------BEGIN USER PREFERENCES---------------------
 # Define time format (12 or 24 hour)
@@ -14,8 +14,8 @@ show_weather = "yes"
 # Define temperature unit (F or C)
 unit_pref = "F"
 
-# Define your zip code for weather updates
-user_zipcode = 20001
+# Define your US zip code
+user_zipcode = "20001"
 
 # Default display brightness (0 to 15)
 default_brightness = 15
@@ -27,7 +27,7 @@ auto_dimming = "enabled"
 day_bright = 15
 
 # Display brightness during night (0 to 15)
-night_bright = 15
+night_bright = 7
 #----------------------END USER PREFERENCES----------------------
 
 #!/usr/bin/python
@@ -48,8 +48,6 @@ os.chdir('/usr/bin/rpi-clock')
 
 # Set the hour offset based on user preference
 hour_offset = 24 - hour_format
-# Set numeric zip code to a string value
-zipcode = str(user_zipcode)
 
 # Define display self-test function
 def selftest():
@@ -127,55 +125,36 @@ def weatherupdate():
 	# Set weather_update_error to default value
 	weather_update_error = "false"
 
-	# Cleanup temp files
-	os.system("rm -r -f *.tmp")
-		
+	# Cleanup temp file
+	os.system("rm weatherdata.tmp")
+
 	# Create URL for weather lookup
 	url = "https://www.wunderground.com/cgi-bin/findweather/getForecast?query=" + zipcode
-	# Create wget command to pull weather info
-	weatherupdate = "wget -T 15 -t 1 -O weatherdata.tmp " + url
-				
-	# Get current weather
+	
+	# Generate weather update command
+	weatherupdate = "curl -A 'Mozilla/5.0' -L -o weatherdata.tmp " + url
+	# Temperature current data
 	os.system(weatherupdate)
-		
+
+	# Parse temperature data
+	os.system("sudo bash get_temp.sh")
+	
 	# Read weatherdata.tmp file and extract current temperature
-	if os.path.isfile('weatherdata.tmp'):
+	if os.path.isfile('current_temp.tmp'):
 		if os.path.getsize('weatherdata.tmp') > 0:
-			with open('weatherdata.tmp', 'r') as f:
-				content = f.read()
-				size = len(content)
-				start = 0
-				while start < size:
-					# Look for lines of text that begin with "temp_now: ' "
-					start = content.find("temp_now: ",start)
-					start = start if start != -1 else size
-					# Once the line has been found, read the text until the '&'
-					end = content.find("&",start)
-					end = end if end != -1 else size
-					# Set extracted_temp to the value of the text found starting at the 10th character
-					extracted_temp = content[start + 10 : end]
-					# Fall out of loop
-					start = end + 1
-					# Open tempfile.tmp
-					tempfile = open('current_temperature.tmp', 'w')
-					# Write extracted_temp to tempfile.tmp
-					print >> tempfile, extracted_temp
-			# Close tempfile.tmp
-			tempfile.close()
-
 			# Extract raw temperature value
-			raw_temp = open('current_temperature.tmp', 'r').read()
-
+			raw_temp = open('current_temp.tmp', 'r').read()
+	
 			# Convert temperature value to an integer
 			current_temp = int(float(raw_temp))
-			
+	
 			# Handle temperature based on user preference (default is F)
 			if (unit_pref == "C"):
 				conversion = ((current_temp - 32) / 1.8)
 				current_temp = int(float(conversion))
-			display.disp.clear()
-		else:
-			weather_update_error = "true"
+				display.disp.clear()
+	else:
+		weather_update_error = "true"
 
 # Define draw unit function
 def draw_unit():
