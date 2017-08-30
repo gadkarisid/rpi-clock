@@ -12,7 +12,6 @@ get_temp=$(cat weatherdata.tmp | grep og:title | grep -o [0-9]*.[0-9])
 # Condiditon for temperature updates
 # If 'get_temp' is empty then exit
 if [ -z "$get_temp" ]; then
-	touch error.file
 	exit 1
 else
 	# If '$get_temp' is valid, update the file
