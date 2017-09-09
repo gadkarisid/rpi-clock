@@ -19,9 +19,10 @@ Instructions:
 3. Install dependency packages ('sudo apt-get install build-essential python-dev python-smbus python-imaging curl') 
 4. Run 'git clone https://github.com/gadkarisid/rpi-clock && cd rpi-clock && bash INSTALL'
 5. Modify '/etc/rc.local' and add 'exec ~/watchdog.sh --silent &' before the 'exit 0' line.
-6. Modify the user preferences in '/usr/bin/rpi-clock/clock.py'
-7. Shutdown and power off the Raspberry Pi
-8. Connect necessary GPIO pins to 7 segment display
-9. Boot the Raspberry Pi
+6. Sign up for a free developer's API key with Weather Underground
+7. Modify the user preferences in '/usr/bin/rpi-clock/clock.py'
+8. Shutdown and power off the Raspberry Pi
+9. Connect necessary GPIO pins to 7 segment display
+10. Boot the Raspberry Pi
 
 NOT FOR COMMERCIAL USE
