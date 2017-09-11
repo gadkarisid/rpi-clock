@@ -149,20 +149,19 @@ def weatherupdate():
 		pass
 	
 	# Read weatherdata.tmp file and extract current temperature
-	if os.path.isfile('current_temp.tmp'):
-		if os.path.getsize('weatherdata.tmp') > 0:
-			# Extract raw temperature value
-			raw_temp = open('current_temp.tmp', 'r').read()
+	if os.path.getsize('current_temp.tmp') > 0:
+		# Extract raw temperature value
+		raw_temp = open('current_temp.tmp', 'r').read()
 	
-			# Convert temperature value to an integer
-			float_temp = float(raw_temp)
-			current_temp = int(round(float_temp,0))
+		# Convert temperature value to an integer
+		float_temp = float(raw_temp)
+		current_temp = int(round(float_temp,0))
 			
-			# Handle temperature based on user preference (default is F)
-			if (unit_pref == "C"):
-				conversion = ((current_temp - 32) / 1.8)
-				current_temp = int(float(conversion))
-				display.disp.clear()
+		# Handle temperature based on user preference (default is F)
+		if (unit_pref == "C"):
+			conversion = ((current_temp - 32) / 1.8)
+			current_temp = int(float(conversion))
+			display.disp.clear()
 	else:
 		weather_update_error = "true"
 
@@ -255,11 +254,12 @@ foo = 0
 
 # Start main loop
 while(True):
-	# If RPi is shutting down then run the "signal_handler" function and clear the LED display
-	signal.signal(signal.SIGTERM, signal_handler)
 	# Check current time
 	currenttime()
 	
+	# If RPi is shutting down then run the "signal_handler" function and clear the LED display
+	signal.signal(signal.SIGTERM, signal_handler)
+		
 	# First run behavior
 	if (auto_dimming == "enabled"):
 		if ((minute == 0) and (second <= 10)) or (foo == 0):
@@ -292,3 +292,6 @@ while(True):
 	
 	# Flag to indicate that script has already been started to avoid resetting display brightness
 	foo = 1
+
+	# Check current time
+	currenttime()
