@@ -2,7 +2,7 @@
 # Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met: * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer. * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution. * Neither the name of the nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-# Last Revision Date: 09/09/2017
+# Last Revision Date: 09/11/2017
 
 #---------------------BEGIN USER PREFERENCES---------------------
 # Define time format (12 or 24 hour)
@@ -128,8 +128,9 @@ def weatherupdate():
 	# Set weather_update_error to default value
 	weather_update_error = "false"
 
-	# Cleanup temp file
+	# Cleanup temp files
 	os.system("rm weatherdata.tmp")
+	os.system("rm current_temp.tmp")
 
 	# Create URL for weather lookup
 	url = "http://api.wunderground.com/api/" + api_key + "/conditions/q/" + zipcode + ".json"
@@ -137,11 +138,15 @@ def weatherupdate():
 	# Generate weather update command
 	weatherupdate = "curl -A 'Mozilla/5.0' -L -o weatherdata.tmp " + url
 	
-	# Temperature current data
-	os.system(weatherupdate)
-
-	# Parse temperature data
-	os.system("sudo bash get_temp.sh")
+	try:
+		# Get data from Weather Underground
+		os.system(weatherupdate)
+		# Parse temperature data
+		os.system("sudo bash get_temp.sh")
+		pass
+	except:
+		weather_update_error = "true"
+		pass
 	
 	# Read weatherdata.tmp file and extract current temperature
 	if os.path.isfile('current_temp.tmp'):
@@ -151,7 +156,7 @@ def weatherupdate():
 	
 			# Convert temperature value to an integer
 			float_temp = float(raw_temp)
-			current_temp = int(round(float_temp))
+			current_temp = int(round(float_temp,0))
 			
 			# Handle temperature based on user preference (default is F)
 			if (unit_pref == "C"):
@@ -266,11 +271,16 @@ while(True):
 		weatherupdate()
 		foo = 1
 
-	# Get updated weather info on the even minute
+	# Get updated weather info
 	if ((show_weather == "yes") and (flag_getweather == "true")):
-		weatherupdate()
-		display.disp.clear()
-		displayweather()
+		try:
+			weatherupdate()
+			display.disp.clear()
+			displayweather()
+			pass
+		except:
+			displaytime()
+			pass
 
 	# Show current temperature 3 times every minute
 	if (show_weather == "yes" and flag_displayweather == "true" and weather_update_error == "false"):
