@@ -220,9 +220,9 @@ def displayweather():
 		# First digit of temperature
 		display.writeDigit(0, int(current_temp / 100))
 		# Second digit of temperature
-		display.writeDigit(1, current_temp % 10)
+		display.writeDigit(1, current_temp % 1)
 		# Third digit of temperature
-		display.writeDigit(3, current_temp % 1)
+		display.writeDigit(3, current_temp % 10)
 		
 	# Draw temperature unit
 	draw_unit()
