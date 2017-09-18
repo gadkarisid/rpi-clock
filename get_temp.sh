@@ -7,7 +7,7 @@
 #!/bin/sh
 
 # Parse weatherdata.tmp file for current temperature and extract float value
-get_temp=$(cat weatherdata.tmp | grep temp_f | grep -o [0-9]*.[0-9] | tr -d '"' | tr -d ':')
+get_temp=$(cat weatherdata.tmp | grep temp_f | tr -d 'temp_f' | tr -d '"' | tr -d ':' | tr -d ',')
 
 # Condiditon for temperature updates
 # If 'get_temp' is empty then exit
