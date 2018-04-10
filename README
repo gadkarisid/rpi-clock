@@ -5,7 +5,7 @@ Overview:
 This package displays the current time (via NTP) and current outside temperature (via Weather Underground API) on an Adafruit 7 segment LED display. Since there is no real time clock involved, the time is only accurate while the Raspberry Pi is powered on and connected to the NTP server (private or public). It is most accurate when the NTP source has low drift. Time can be displayed in 12 or 24 hour format. Your local zip code can be configured for local temperature. Temperature info is displayed in Farenheit or Celsius, however the 7 segment display may not contain decimal characters so temperatures are rounded to the nearest integer. There is a watchdog script ('watchdog.sh') that runs in the background to ensure the clock script is started at boot and also is restarted if it crashes for any reason.
 
 Requirements:
-- Raspbery Pi (tested on RPi Model B and RPi 2 using Raspbian, OSMC, and Volumio2)
+- Raspbery Pi (tested on RPi Model B, RPi 2, and RPi 3 using Raspbian, Raspbian Stretch, OSMC, and Volumio2)
 - Assembled 7 Segment display w/I2C backpack from Adafruit (ex. https://www.adafruit.com/products/1270)
 - Network connectivity on Raspberry Pi
 - NTP servers configured on Raspberry Pi (/etc/ntp.conf)
