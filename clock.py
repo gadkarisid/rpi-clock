@@ -119,6 +119,7 @@ def currenttime():
 	# Deine condition to display the temperature 4 times a minute
 	if ((second == 5) or (second == 20) or (second == 35) or (second == 50)):
 		flag_displayweather = "true"
+
 # Define weather update function
 def weatherupdate():
 	global current_temp
@@ -268,7 +269,7 @@ while(True):
 			displaytime()
 			pass
 
-	# Show current temperature 3 times every minute
+	# Show current temperature
 	if (show_weather == "yes" and flag_displayweather == "true" and weather_update_error == "false"):
 		displayweather()
 
