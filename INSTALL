@@ -19,7 +19,6 @@ fi
 
 sudo mv LICENSE /usr/bin/rpi-clock/
 sudo mv clock.py /usr/bin/rpi-clock/
-sudo mv get_temp.sh /usr/bin/rpi-clock/
 sudo mv display_test.py /usr/bin/rpi-clock
 sudo mv clear_display.py /usr/bin/rpi-clock
 sudo mv README /usr/bin/rpi-clock
