@@ -1,8 +1,8 @@
-# Copyright (c) 2015-2017 Sid Gadkari. All rights reserved.
+# Copyright (c) 2015-2018 Sid Gadkari. All rights reserved.
 # Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met: * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer. * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution. * Neither the name of the nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-# Last Revision Date: 09/11/2017
+# Last Revision Date: 04/17/2018
 
 #---------------------BEGIN USER PREFERENCES---------------------
 # Define time format (12 or 24 hour)
@@ -40,6 +40,8 @@ import time
 import datetime
 import signal
 import sys
+import json
+import urllib2
 from Adafruit_7Segment import *
 
 # Initialize display
@@ -117,53 +119,37 @@ def currenttime():
 	# Deine condition to display the temperature 4 times a minute
 	if ((second == 5) or (second == 20) or (second == 35) or (second == 50)):
 		flag_displayweather = "true"
-
 # Define weather update function
 def weatherupdate():
-	global raw_temp
 	global current_temp
 	global unit_pref
 	global weather_update_error
-	
+
 	# Set weather_update_error to default value
 	weather_update_error = "false"
 
-	# Cleanup temp files
-	os.system("rm weatherdata.tmp")
-	os.system("rm current_temp.tmp")
-
 	# Create URL for weather lookup
 	url = "http://api.wunderground.com/api/" + api_key + "/conditions/q/" + zipcode + ".json"
-	
-	# Generate weather update command
-	weatherupdate = "curl -A 'Mozilla/5.0' -L -o weatherdata.tmp " + url
-	
+
+	# Get weather conditions
 	try:
-		# Get data from Weather Underground
-		os.system(weatherupdate)
-		# Parse temperature data
-		os.system("sudo bash get_temp.sh")
+		weatherdata = urllib2.urlopen(url)
+		read_weather = weatherdata.read()
+		parsed_weatherdata = json.loads(read_weather)
+		# Parse current temperature in Fahrenheit
+		if (unit_pref == "F"):
+			parsed_temp = parsed_weatherdata['current_observation']['temp_f']
+		# Parse current temperature in Celsius
+		if (unit_pref == "C"):
+			parsed_temp = parsed_weatherdata['current_observation']['temp_c']
+		weatherdata.close()
 		pass
 	except:
 		weather_update_error = "true"
 		pass
-	
-	# Read weatherdata.tmp file and extract current temperature
-	if os.path.getsize('current_temp.tmp') > 0:
-		# Extract raw temperature value
-		raw_temp = open('current_temp.tmp', 'r').read()
-	
-		# Convert temperature value to an integer
-		float_temp = float(raw_temp)
-		current_temp = int(round(float_temp,0))
-			
-		# Handle temperature based on user preference (default is F)
-		if (unit_pref == "C"):
-			conversion = ((current_temp - 32) / 1.8)
-			current_temp = int(float(conversion))
-			display.disp.clear()
-	else:
-		weather_update_error = "true"
+
+	# Round Temperature to nearest integer
+	current_temp = int(round(parsed_temp,0))
 
 # Define draw unit function
 def draw_unit():
