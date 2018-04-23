@@ -4,7 +4,6 @@ After=network.target
 
 [Service]
 Type=simple
-User=pi
 WorkingDirectory=/usr/bin/rpi-clock
 ExecStart=/usr/bin/python /usr/bin/rpi-clock/clock.py
 Restart=on-failure
