@@ -22,9 +22,12 @@ sudo mv clock.py /usr/bin/rpi-clock/
 sudo mv display_test.py /usr/bin/rpi-clock
 sudo mv clear_display.py /usr/bin/rpi-clock
 sudo mv README /usr/bin/rpi-clock
-sudo mv watchdog.sh ~/
+sudo mv rpi-clock.service /etc/systemd/system
 cd ~/
-sudo chmod +x watchdog.sh
+sudo chmod 644 /etc/systemd/system/rpi-clock.service
+sudo systemctl daemon-reload
+sudo systemctl enable rpi-clock.service
+sudo systemctl start rpi-clock.service
 rm -r -f rpi-clock
 
 echo "Installation Complete"
