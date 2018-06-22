@@ -35,7 +35,6 @@ night_bright = 7
 
 #!/usr/bin/python
 
-import os
 import time
 import datetime
 import signal
@@ -84,9 +83,6 @@ def selftest():
 def signal_handler(signal, frame):
 	# If RPi is shutting down or rebooting clear the LED display
 	display.disp.clear()
-	# Kill watchdog script
-        kill_watchdog = "sudo pkill -9 -f watchdog.sh"
-        os.system(kill_watchdog)
 	sys.exit(0)
 
 # Define current time function
