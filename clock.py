@@ -4,7 +4,7 @@
 # Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met: * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer. * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution. * Neither the name of the nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-# Last Revision Date: 2026-03-09
+# Last Revision Date: 2026-06-15 - I2C watchdog thread added to recover from bus hangs
 
 #---------------------BEGIN USER PREFERENCES-------------
 # Define time format (12 or 24 hour)
@@ -41,6 +41,10 @@ network_wait_attempts = 12
 # This prevents a single transient failure from permanently latching the error flag
 weather_error_threshold = 3
 
+# Watchdog timeout in seconds - if the main loop hasn't updated the heartbeat
+# within this window, the watchdog will kill the process so systemd can restart it
+watchdog_timeout = 15
+
 #----------------------END USER PREFERENCES--------------
 
 import os
@@ -50,6 +54,7 @@ import signal
 import sys
 import json
 import socket
+import threading
 import urllib.request
 import urllib.error
 from board import SCL, SDA
@@ -72,8 +77,8 @@ hour_offset = 24 - hour_format
 # Track consecutive weather fetch failures instead of a simple boolean latch
 weather_error_count = 0
 
-# Set the hour offset based on user preference
-hour_offset = 24 - hour_format
+# Watchdog heartbeat timestamp - updated each main loop iteration
+last_heartbeat = time.monotonic()
 
 # Define display self-test function
 def selftest():
@@ -120,6 +125,22 @@ def wait_for_network():
             time.sleep(5)
     print("Network did not become ready in time. Weather disabled until next successful fetch.")
     return False
+
+# Define watchdog thread function
+def watchdog():
+    """
+    Monitor the main loop heartbeat. If the heartbeat has not been updated
+    within watchdog_timeout seconds, the main loop is assumed to be hung on
+    an I2C transaction. Send SIGTERM to trigger the signal handler, which
+    clears the display before exiting. systemd Restart=always will respawn.
+    """
+    global last_heartbeat
+    while True:
+        time.sleep(5)
+        elapsed = time.monotonic() - last_heartbeat
+        if elapsed > watchdog_timeout:
+            print(f"Watchdog: main loop hung for {elapsed:.1f}s, sending SIGTERM to self")
+            os.kill(os.getpid(), signal.SIGTERM)
 
 # Define current time function
 def currenttime():
@@ -181,7 +202,7 @@ def weatherupdate():
         # Round temperature to nearest integer
         current_temp = int(round(parsed_temp, 0))
 
-        # Successful fetch — reset error counter so display recovers automatically
+        # Successful fetch - reset error counter so display recovers automatically
         weather_error_count = 0
         print(f"Weather updated: {current_temp}{unit_pref}")
 
@@ -273,6 +294,11 @@ if __name__ == "__main__":
     # Register signal handler for clean shutdown
     signal.signal(signal.SIGTERM, signal_handler)
 
+    # Start watchdog thread
+    wdog = threading.Thread(target=watchdog, daemon=True)
+    wdog.start()
+    print(f"Watchdog started with {watchdog_timeout}s timeout")
+
     # Wait for network before attempting first weather fetch
     # This resolves the boot race condition with systemd-resolved
     if show_weather == "yes":
@@ -281,6 +307,9 @@ if __name__ == "__main__":
     # Start main loop
     try:
         while True:
+            # Update watchdog heartbeat
+            last_heartbeat = time.monotonic()
+
             # Check current time
             currenttime()
 
