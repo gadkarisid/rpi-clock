@@ -4,6 +4,7 @@ After=network-online.target time-sync.target
 Wants=network-online.target
 
 [Service]
+Environment=PYTHONUNBUFFERED=1
 Type=simple
 ExecStart=/usr/bin/python3 /usr/bin/rpi-clock/clock.py
 WorkingDirectory=/usr/bin/rpi-clock
